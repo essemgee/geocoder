@@ -8,9 +8,9 @@ module Geocoder::Lookup
     def initialize
       if !configuration[:file].nil?
         begin
-          require 'geoip2'
+          require 'maxmind_geoip2'
         rescue LoadError
-          raise "Could not load geoip2 dependency. To use MaxMind Local lookup you must add the geoip2 gem to your Gemfile or have it installed in your system."
+          raise "Could not load maxmind_geoip2 dependency. To use MaxMind Local lookup you must add the maxmind_geoip2 gem to your Gemfile or have it installed in your system."
         end
       else
         raise "File must be specified when loading GeoIP2 database."
@@ -29,8 +29,8 @@ module Geocoder::Lookup
     private
 
     def results(query)
-      GeoIP2::file(configuration[:file])
-      result = GeoIP2::locate(query.to_s, 'en')
+      MaxmindGeoIP2::file(configuration[:file])
+      result = MaxmindGeoIP2::locate(query.to_s, 'en')
       (result.nil? || !result) ? [] : [result.to_hash]
     end
 
